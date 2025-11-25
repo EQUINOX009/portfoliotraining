@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f4f4c8;
+            --text: hsl(0, 13%, 14%);
+            --accent: #002FA7;
+            --sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            --mono: 'Courier New', monospace;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--text);
+            color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            font-size: clamp(4rem, 15vw, 12rem);
+            font-weight: 900;
+            transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        #preloader.hide {
+            transform: translateY(-100%);
+        }
+
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: width 0.3s, height 0.3s;
+        }
+
+        #cursor.hover {
+            width: 60px;
+            height: 60px;
+        }
+
+        #grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        header {
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        nav {
+            font-family: var(--mono);
+            font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-text {
+            font-size: clamp(4rem, 15vw, 18rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 0.9;
+            text-align: center;
+            will-change: transform;
+            font-family: 'Poppins', sans-serif;
+              font-weight: 600;
+  font-style: normal;
+        }
+
+        .hero-text span {
+            display: block;
+        }
+
+        .hero-subtitle {
+            position: absolute;
+            bottom: 4rem;
+            right: 4rem;
+
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            text-align: right;
+            max-width: 300px;
+        }
+
+        .marquee {
+            background: var(--text);
+            color: var(--bg);
+            padding: 2rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scroll 20s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        #work {
+            padding: 8rem 4rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 6vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 4rem;
+            letter-spacing: -0.03em;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            grid-auto-flow: dense;
+        }
+
+        .project {
+            position: relative;
+            overflow: hidden;
+            cursor: none;
+            transition: opacity 0.4s;
+              box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .project:hover {
+
+    box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.5); 
+}
+
+        .project img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+  
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+        .project:hover img {
+            transform: scale(1.05);
+           
+
+        }
+
+        :is(.gallery:has(.project:hover)) .project:not(:hover) {
+             /*box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.2); */
+   opacity: 0.4;
+}
+
+        .project-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 900;
+            color: var(--bg);
+            mix-blend-mode: difference;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+        }
+
+        .project:hover .project-title {
+            opacity: 1;
+        }
+
+     
+
+        footer {
+            padding: 8rem 4rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 0.9;
+        }
+
+        .contact-info {
+            font-family: var(--mono);
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .contact-info a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-info a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin-left: 1rem;
+            }
+
+            .hero-subtitle {
+                bottom: 2rem;
+                right: 2rem;
+            }
+
+            #work {
+                padding: 4rem 2rem;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .project:nth-child(3n) {
+                grid-column: span 1;
+            }
+
+            footer {
+                padding: 4rem 2rem 2rem;
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="loading">
+    <div id="preloader">0%</div>
+    <div id="cursor"></div>
+    <div id="grain"></div>
+
+    <header>
+        <div class="logo">STUDIO</div>
+        <nav>
+            <a href="#work">WORK</a>
+            <a href="#about">ABOUT</a>
+            <a href="#contact">CONTACT</a>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <h1 class="hero-text">
+            <span data-speed="0.5">Kiran</span>
+            <span data-speed="0.8">Joshi.</span>
+        </h1>
+        <div class="hero-subtitle">
+            Creating bold digital experiences at the intersection of art and technology
+        </div>
+    </section>
+
+    <div class="marquee">
+        <div class="marquee-content">
+            AVAILABLE FOR FREELANCE • ART DIRECTION • BRANDING • AVAILABLE FOR FREELANCE • ART DIRECTION • BRANDING • 
+        </div>
+    </div>
+
+    <section id="work">
+        <h2 class="section-title">SELECTED WORK</h2>
+        <div class="gallery">
+            <div class="project">
+                <img src="sanoprakashsunnyST1.png" alt="Project 1">
+                <div class="project-title">BRAND IDENTITY</div>
+            </div>
+            <div class="project">
+                <img src="sidhakura.png" alt="Project 2">
+                <div class="project-title">DIGITAL CAMPAIGN</div>
+            </div>
+            <div class="project">
+                <img src="KeraGanatantra.png" alt="Project 3">
+                <div class="project-title">ART DIRECTION</div>
+            </div>
+            <div class="project">
+                <img src="kahajanchau.png" alt="Project 4">
+                <div class="project-title">PACKAGING DESIGN</div>
+            </div>
+            <div class="project">
+                <img src="LOG.png" alt="Project 5">
+                <div class="project-title">VISUAL IDENTITY</div>
+            </div>
+            <div class="project">
+                <img src="LOGhoodie.png" alt="Project 6">
+                <div class="project-title">EDITORIAL DESIGN</div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-title">LET'S WORK TOGETHER</div>
+        <div class="contact-info">
+            <a href="mailto:hello@studio.com">HELLO@STUDIO.COM</a>
+            <a href="tel:+1234567890">+1 234 567 890</a>
+            <a href="#">INSTAGRAM</a>
+            <a href="#">LINKEDIN</a>
+            <div style="margin-top: 2rem;">© 2024 STUDIO</div>
+        </div>
+    </footer>
+
+    <script>
+        // Preloader
+        let progress = 0;
+        const preloader = document.getElementById('preloader');
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    preloader.classList.add('hide');
+                    document.body.classList.remove('loading');
+                }, 500);
+            }
+            preloader.textContent = Math.floor(progress) + '%';
+        }, 100);
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor hover effect
+        const hoverElements = document.querySelectorAll('a, .project');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Parallax Hero
+        const heroSpans = document.querySelectorAll('.hero-text span');
+        window.addEventListener('scroll', () => {
+            const scroll = window.pageYOffset;
+            heroSpans.forEach(span => {
+                const speed = span.dataset.speed;
+                span.style.transform = `translateY(${scroll * speed}px)`;
+            });
+        });
+
+        const projects = document.querySelectorAll('.project');
+        projects.forEach(project => {
+            const title = project.querySelector('.project-title');
+            project.addEventListener('mousemove', (e) => {
+                const rect = project.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                title.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+            });
+        });
+
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
