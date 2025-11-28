@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Graphic Designer Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --charcoal: #0e0e0e;
+            --off-white: #e0e0e0;
+            --silver: #5a5a5a;
+            --serif: 'Playfair Display', serif;
+            --sans: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--charcoal);
+            color: var(--off-white);
+            font-family: var(--sans);
+            overflow-x: hidden;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #counter {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-family: var(--serif);
+            font-weight: 900;
+            color: var(--off-white);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-family: var(--serif);
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .magnetic-btn {
+            font-family: var(--sans);
+            font-size: clamp(0.8rem, 1vw, 0.9rem);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        #hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: var(--serif);
+            font-size: clamp(3rem, 12vw, 12rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+
+        .skew-container {
+            width: 100%;
+            will-change: transform;
+        }
+
+        #about {
+            padding: 15vh 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--silver);
+            margin-bottom: 3rem;
+        }
+
+        .about-text {
+            font-family: var(--serif);
+            font-size: clamp(2rem, 5vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.3;
+            max-width: 1100px;
+        }
+
+        .reveal-line {
+            display: block;
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
+        }
+
+        #work {
+            padding: 15vh 4rem 25vh;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .work-list {
+            list-style: none;
+            margin-top: 5rem;
+        }
+
+        .work-item {
+            padding: 3rem 0;
+            border-top: 1px solid var(--silver);
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .work-item:last-child {
+            border-bottom: 1px solid var(--silver);
+        }
+
+        .project-name {
+            font-family: var(--serif);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            transition: color 0.3s;
+        }
+
+        .work-item:hover .project-name {
+            color: #fff;
+        }
+
+        .project-year,
+        .project-category {
+            font-size: clamp(0.8rem, 1vw, 0.9rem);
+            font-weight: 300;
+            color: var(--silver);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .floating-image {
+            position: fixed;
+            width: 400px;
+            height: 500px;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            border: 1px solid var(--silver);
+        }
+
+        .floating-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #footer {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--charcoal);
+            position: relative;
+            padding: 4rem;
+        }
+
+        .footer-cta {
+            font-family: var(--serif);
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            text-decoration: none;
+            color: var(--off-white);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            display: inline-block;
+            line-height: 1;
+        }
+
+        .footer-cta:hover {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .footer-info {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: clamp(0.8rem, 1vw, 0.9rem);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: var(--silver);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .footer-links a {
+            color: var(--silver);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--off-white);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-actions {
+                gap: 1.5rem;
+            }
+
+            #about,
+            #work {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+
+            .work-item {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 2rem 0;
+            }
+
+            .floating-image {
+                width: 250px;
+                height: 300px;
+            }
+
+            #footer {
+                padding: 2rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="loading">
+    <div id="loader">
+        <div id="counter">0</div>
+    </div>
+
+    <nav>
+        <div class="logo">ATELIER</div>
+        <div class="nav-actions">
+            <div class="magnetic-btn" data-magnetic>MENU</div>
+            <div class="magnetic-btn" data-magnetic>CONTACT</div>
+        </div>
+    </nav>
+
+    <div class="skew-container">
+        <section id="hero">
+            <img class="hero-img" src="https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=1920&h=1080&fit=crop" alt="Hero">
+            <div class="hero-content">
+                <h1 class="hero-title">CREATIVE<br>DIRECTION</h1>
+                <p class="hero-subtitle">Senior Graphic Designer</p>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="section-label">About</div>
+            <div class="about-text">
+                <span class="reveal-line">I craft visual narratives that</span>
+                <span class="reveal-line">bridge art and commerce,</span>
+                <span class="reveal-line">transforming brands into</span>
+                <span class="reveal-line">immersive experiences.</span>
+            </div>
+        </section>
+
+        <section id="work">
+            <div class="section-label">Selected Work</div>
+            <ul class="work-list">
+                <li class="work-item" data-img="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=1000&fit=crop">
+                    <div class="project-name" data-text="MONOLITH STUDIO">MONOLITH STUDIO</div>
+                    <div class="project-year">2024</div>
+                    <div class="project-category">Branding</div>
+                </li>
+                <li class="work-item" data-img="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=1000&fit=crop">
+                    <div class="project-name" data-text="ELYSIAN RESIDENCE">ELYSIAN RESIDENCE</div>
+                    <div class="project-year">2024</div>
+                    <div class="project-category">Art Direction</div>
+                </li>
+                <li class="work-item" data-img="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=1000&fit=crop">
+                    <div class="project-name" data-text="ZENITH COLLECTION">ZENITH COLLECTION</div>
+                    <div class="project-year">2023</div>
+                    <div class="project-category">Editorial</div>
+                </li>
+                <li class="work-item" data-img="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=1000&fit=crop">
+                    <div class="project-name" data-text="AVANT ARCHITECTURE">AVANT ARCHITECTURE</div>
+                    <div class="project-year">2023</div>
+                    <div class="project-category">Identity</div>
+                </li>
+                <li class="work-item" data-img="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&h=1000&fit=crop">
+                    <div class="project-name" data-text="NOIR FASHION WEEK">NOIR FASHION WEEK</div>
+                    <div class="project-year">2023</div>
+                    <div class="project-category">Campaign</div>
+                </li>
+            </ul>
+        </section>
+    </div>
+
+    <footer id="footer">
+        <a href="mailto:hello@atelier.com" class="footer-cta">LET'S TALK</a>
+        <div class="footer-info">
+            <p>AVAILABLE FOR SELECT PROJECTS</p>
+            <div class="footer-links">
+                <a href="#">INSTAGRAM</a>
+                <a href="#">LINKEDIN</a>
+                <a href="#">BEHANCE</a>
+            </div>
+            <p style="margin-top: 3rem; font-size: 0.7rem;">© 2024 ATELIER</p>
+        </div>
+    </footer>
+
+    <div class="floating-image">
+        <img src="" alt="Project Preview">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+
+    <script>
+        // Lenis Smooth Scroll
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Loading Sequence
+        let progress = 0;
+        const counter = document.getElementById('counter');
+        const loader = document.getElementById('loader');
+        const heroImg = document.querySelector('.hero-img');
+
+        const loadInterval = setInterval(() => {
+            progress += Math.random() * 10 + 5;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(loadInterval);
+                
+                gsap.to(counter, {
+                    innerHTML: 100,
+                    duration: 0.3,
+                    snap: { innerHTML: 1 },
+                    onUpdate: function() {
+                        counter.textContent = Math.floor(this.targets()[0].innerHTML);
+                    },
+                    onComplete: () => {
+                        // Shudder effect
+                        gsap.to(loader, {
+                            y: -10,
+                            duration: 0.1,
+                            yoyo: true,
+                            repeat: 3,
+                            onComplete: () => {
+                                // Slide up curtain
+                                gsap.to(loader, {
+                                    y: '-100%',
+                                    duration: 1.2,
+                                    ease: 'power4.inOut'
+                                });
+                                
+                                // Zoom out hero image
+                                gsap.fromTo(heroImg, 
+                                    { scale: 1.4 },
+                                    { scale: 1, duration: 1.5, ease: 'power3.out' }
+                                );
+                                
+                                document.body.classList.remove('loading');
+                            }
+                        });
+                    }
+                });
+            } else {
+                counter.textContent = Math.floor(progress);
+            }
+        }, 100);
+
+        // Magnetic Navigation
+        const magneticBtns = document.querySelectorAll('[data-magnetic]');
+        
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                gsap.to(btn, {
+                    x: x * 0.3,
+                    y: y * 0.3,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.5,
+                    ease: 'elastic.out(1, 0.5)'
+                });
+            });
+        });
+
+        // Skew on Scroll
+        let currentScroll = 0;
+        let targetScroll = 0;
+        let ease = 0.075;
+
+        lenis.on('scroll', (e) => {
+            targetScroll = e.animatedScroll;
+        });
+
+        function skewScroll() {
+            currentScroll += (targetScroll - currentScroll) * ease;
+            const velocity = targetScroll - currentScroll;
+            const skewAmount = Math.min(Math.max(velocity * 0.015, -3), 3);
+            
+            gsap.to('.skew-container', {
+                skewY: skewAmount,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
+            
+            requestAnimationFrame(skewScroll);
+        }
+        skewScroll();
+
+        // Reveal Lines on Scroll
+        gsap.utils.toArray('.reveal-line').forEach((line, i) => {
+            gsap.to(line, {
+                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)',
+                duration: 1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: line,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none'
+                },
+                delay: i * 0.1
+            });
+        });
+
+        // Interactive Gallery
+        const floatingImage = document.querySelector('.floating-image');
+        const workItems = document.querySelectorAll('.work-item');
+
+        workItems.forEach(item => {
+            const projectName = item.querySelector('.project-name');
+            const originalText = projectName.dataset.text;
+            
+            item.addEventListener('mouseenter', () => {
+                const imgSrc = item.dataset.img;
+                floatingImage.querySelector('img').src = imgSrc;
+                
+                gsap.to(floatingImage, {
+                    opacity: 1,
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+                
+                // Scramble effect
+                scrambleText(projectName, originalText);
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                gsap.to(floatingImage, {
+                    opacity: 0,
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+            });
+            
+            item.addEventListener('mousemove', (e) => {
+                gsap.to(floatingImage, {
+                    x: e.clientX - 200,
+                    y: e.clientY - 250,
+                    duration: 0.8,
+                    ease: 'power2.out'
+                });
+            });
+        });
+
+        function scrambleText(element, finalText) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let iteration = 0;
+            const speed = 30;
+            
+            const interval = setInterval(() => {
+                element.textContent = finalText
+                    .split('')
+                    .map((char, index) => {
+                        if (char === ' ') return ' ';
+                        if (index < iteration) return finalText[index];
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    })
+                    .join('');
+                
+                if (iteration >= finalText.length) {
+                    clearInterval(interval);
+                }
+                
+                iteration += 1 / 3;
+            }, speed);
+        }
+
+        // Footer Parallax Reveal
+        ScrollTrigger.create({
+            trigger: '#footer',
+            start: 'top bottom',
+            end: 'top top',
+            scrub: 1,
+            onUpdate: (self) => {
+                gsap.to('.skew-container', {
+                    y: -self.progress * 100,
+                    ease: 'none'
+                });
+            }
+        });
+    </script>
+</body>
+</html>
